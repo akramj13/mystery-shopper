@@ -43,73 +43,100 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* Shopify Colors */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Shopify brand colors */
+  --shopify-green: #008060;
+  --shopify-light-green: #d1e8e0;
+  --shopify-dark-green: #004c3f;
+  --shopify-black: #212326;
+  --shopify-lighter-black: #1a1a1a;
+  --shopify-grey: #6b7177;
+  --shopify-light-grey: #f6f6f7;
+
+  /* Borders and UI */
+  --radius: 0.5rem;
+  --background: #ffffff;
+  --foreground: #212326;
+  --card: #ffffff;
+  --card-foreground: #212326;
+  --popover: #ffffff;
+  --popover-foreground: #212326;
+
+  /* Primary is Shopify green */
+  --primary: #008060;
+  --primary-foreground: #ffffff;
+
+  /* Secondary colors */
+  --secondary: #f6f6f7;
+  --secondary-foreground: #212326;
+  --muted: #f6f6f7;
+  --muted-foreground: #6b7177;
+  --accent: #004c3f;
+  --accent-foreground: #ffffff;
+  --destructive: #d82c0d;
+  --border: #dfe3e8;
+  --input: #dfe3e8;
+  --ring: #008060;
+
+  /* Chart colors */
+  --chart-1: #008060;
+  --chart-2: #004c3f;
+  --chart-3: #6b7177;
+  --chart-4: #95bf47;
+  --chart-5: #5e8e3e;
+
+  /* Sidebar */
+  --sidebar: #f6f6f7;
+  --sidebar-foreground: #212326;
+  --sidebar-primary: #008060;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #004c3f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #dfe3e8;
+  --sidebar-ring: #008060;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #212326;
+  --foreground: #ffffff;
+  --card: #1a1a1a;
+  --card-foreground: #ffffff;
+  --popover: #1a1a1a;
+  --popover-foreground: #ffffff;
+
+  /* Primary remains green but slightly adjusted for dark mode */
+  --primary: #008060;
+  --primary-foreground: #ffffff;
+
+  /* Adjusted dark mode secondary colors */
+  --secondary: #2c2c2e;
+  --secondary-foreground: #ffffff;
+  --muted: #2c2c2e;
+  --muted-foreground: #a3a8b0;
+  --accent: #004c3f;
+  --accent-foreground: #ffffff;
+  --destructive: #d82c0d;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #008060;
+
+  /* Chart colors */
+  --chart-1: #00a47c;
+  --chart-2: #95bf47;
+  --chart-3: #5e8e3e;
+  --chart-4: #00848e;
+  --chart-5: #b72999;
+
+  /* Sidebar */
+  --sidebar: #1a1a1a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #008060;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #004c3f;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #008060;
 }
 
 @layer base {
@@ -119,4 +146,29 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Shopify-specific styles */
+.shopify-button {
+  @apply bg-[#008060] hover:bg-[#004c3f] text-white font-medium py-3 px-6 rounded transition-colors;
+}
+
+.shopify-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.shopify-section {
+  @apply py-16 md:py-24;
+}
+
+.shopify-heading {
+  @apply text-[#212326] dark:text-white text-4xl md:text-5xl font-bold tracking-tight;
+}
+
+.shopify-subheading {
+  @apply text-[#6b7177] dark:text-gray-300 text-lg md:text-xl;
+}
+
+.shopify-card {
+  @apply bg-white dark:bg-[#1a1a1a] border border-[#dfe3e8] dark:border-gray-800 rounded-lg shadow-sm p-6;
 }

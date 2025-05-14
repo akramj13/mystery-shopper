@@ -5,6 +5,7 @@ import {
   LayoutInfo,
   UIComponents,
   SiteAnalysis,
+  AnalysisResult,
 } from "@/types/critique";
 
 export async function POST(req: Request) {
@@ -98,14 +99,60 @@ export async function POST(req: Request) {
     };
 
     const prompt = `
-You are a world-class UX consultant. Analyze the following Shopify storefront and provide UX feedback:
-1. How effective is the homepage?
-2. Is the brand message clear?
-3. What would confuse or frustrate a new visitor?
-4. Suggestions for improvement?
-5. Analyze the color scheme and visual hierarchy
-6. Comment on the layout and use of space
-7. Evaluate the mobile-friendliness based on CSS breakpoints and responsive design
+You are a world-class UX consultant providing detailed analysis of Shopify storefronts. 
+Analyze the provided data about this Shopify store and generate a comprehensive report in a structured JSON format.
+
+You need to:
+1. Assess how well the site follows UX best practices
+2. Evaluate visual design, layout and usability
+3. Identify strengths and areas for improvement
+4. Assign specific scores on a scale of 1-10 for different aspects of the site
+5. Provide clear, actionable recommendations
+
+You MUST return ONLY valid, properly formatted JSON with no code fences or other formatting. Your response must be valid JSON that can be directly parsed using JSON.parse() with this exact format:
+
+{
+  "overallScore": <number between 1-10 with one decimal point>,
+  "summary": "<brief executive summary of the analysis - about 150 words>",
+  "categoryScores": {
+    "userExperience": <score from 1-10>,
+    "visualDesign": <score from 1-10>,
+    "performance": <score from 1-10>,
+    "accessibility": <score from 1-10>,
+    "conversion": <score from 1-10>
+  },
+  "strengths": [
+    {
+      "title": "<strength title>",
+      "description": "<brief description>"
+    },
+    // 3-5 more strengths
+  ],
+  "improvements": [
+    {
+      "title": "<improvement area title>",
+      "description": "<brief description>",
+      "priority": "<high|medium|low>"
+    },
+    // 3-5 more areas for improvement
+  ],
+  "detailedAnalysis": {
+    "homepageEffectiveness": "<analysis of homepage>",
+    "brandClarity": "<analysis of brand messaging>",
+    "usabilityIssues": "<potential friction points>",
+    "mobileExperience": "<assessment of mobile-friendliness>",
+    "checkoutProcess": "<analysis of checkout if detectable>",
+    "colorScheme": "<analysis of color palette and visual hierarchy>"
+  },
+  "actionableRecommendations": [
+    "<specific recommendation 1>",
+    "<specific recommendation 2>",
+    // 3-5 more recommendations
+  ]
+}
+
+This format is critical as it will be used to generate visualizations in a dashboard.
+Ensure all textual fields are rich in detail but concise, and score values are realistic and nuanced.
 
 Site Analysis Data:
 ${JSON.stringify(siteAnalysis, null, 2)}
@@ -122,13 +169,76 @@ ${JSON.stringify(siteAnalysis, null, 2)}
       contents: prompt,
     });
 
-    const feedback = response.text || "No response from Gemini.";
+    let responseText = response.text || "No response from Gemini.";
 
-    return new Response(JSON.stringify({ feedback }), { status: 200 });
+    try {
+      // Extract JSON from the response text if it's wrapped in markdown code blocks
+      if (responseText.includes("```json") || responseText.includes("```")) {
+        const jsonMatch = responseText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+        if (jsonMatch && jsonMatch[1]) {
+          responseText = jsonMatch[1].trim();
+        }
+      }
+
+      // Try to parse the response as JSON
+      const analysisResult: AnalysisResult = JSON.parse(responseText);
+
+      // Ensure there's a rawFeedback field with the original text
+      if (!analysisResult.rawFeedback) {
+        analysisResult.rawFeedback = responseText;
+      }
+
+      return new Response(JSON.stringify(analysisResult), { status: 200 });
+    } catch (error) {
+      // If parsing fails, create a fallback response
+      console.error("Failed to parse Gemini response as JSON:", error);
+
+      const analysisResult: AnalysisResult = {
+        overallScore: 7.0,
+        summary: responseText.substring(0, 300) + "...",
+        categoryScores: {
+          userExperience: 7,
+          visualDesign: 7,
+          performance: 7,
+          accessibility: 7,
+          conversion: 7,
+        },
+        strengths: [
+          {
+            title: "Analysis Available",
+            description:
+              "The full analysis is available as unstructured text. Please check the detailed feedback.",
+          },
+        ],
+        improvements: [
+          {
+            title: "Parsing Error",
+            description:
+              "The structured data couldn't be parsed correctly. The raw analysis is still available.",
+            priority: "medium",
+          },
+        ],
+        detailedAnalysis: {
+          homepageEffectiveness: "See full analysis",
+          brandClarity: "See full analysis",
+          usabilityIssues: "See full analysis",
+          mobileExperience: "See full analysis",
+          checkoutProcess: "See full analysis",
+          colorScheme: "See full analysis",
+        },
+        actionableRecommendations: ["See full analysis"],
+        rawFeedback: responseText,
+      };
+
+      return new Response(JSON.stringify(analysisResult), { status: 200 });
+    }
   } catch (err) {
     console.error(err);
     return new Response(
-      JSON.stringify({ error: "Failed to fetch or analyze store." }),
+      JSON.stringify({
+        error: "Failed to fetch or analyze store.",
+        details: err instanceof Error ? err.message : String(err),
+      }),
       { status: 500 }
     );
   }
