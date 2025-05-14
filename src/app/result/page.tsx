@@ -71,7 +71,7 @@ export default function Result() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-white to-[#f6f6f7] dark:from-[#212326] dark:to-[#1a1a1a]">
       {/* Navigation - Shopify Style */}
-      <header className="w-full bg-white/90 dark:bg-[#212326]/90 backdrop-blur-sm border-b border-[#dfe3e8] dark:border-gray-800 sticky top-0 z-50">
+      {/* <header className="w-full bg-white/90 dark:bg-[#212326]/90 backdrop-blur-sm border-b border-[#dfe3e8] dark:border-gray-800 sticky top-0 z-50">
         <div className="shopify-container flex justify-between items-center py-4">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold mr-8 text-[#212326] dark:text-white flex items-center">
@@ -117,7 +117,7 @@ export default function Result() {
             </Button>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Main Content - Shopify Style */}
       <main className="flex-grow py-12 relative">
