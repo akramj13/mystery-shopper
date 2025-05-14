@@ -54,6 +54,15 @@
   --shopify-grey: #6b7177;
   --shopify-light-grey: #f6f6f7;
 
+  /* Extended color palette */
+  --accent-purple: #5c6ac4;
+  --accent-purple-light: #b3bcf5;
+  --accent-teal: #47c1bf;
+  --accent-teal-light: #b7ecec;
+  --accent-yellow: #ffea8a;
+  --accent-orange: #ffc97e;
+  --accent-red: #ff9b9b;
+
   /* Borders and UI */
   --radius: 0.5rem;
   --background: #ffffff;
@@ -128,6 +137,15 @@
   --chart-4: #00848e;
   --chart-5: #b72999;
 
+  /* Extended colors for dark mode */
+  --accent-purple: #6e79d6;
+  --accent-purple-light: #444b77;
+  --accent-teal: #2ed0cd;
+  --accent-teal-light: #216e6c;
+  --accent-yellow: #dfc954;
+  --accent-orange: #d49649;
+  --accent-red: #e05858;
+
   /* Sidebar */
   --sidebar: #1a1a1a;
   --sidebar-foreground: #ffffff;
@@ -171,4 +189,320 @@
 
 .shopify-card {
   @apply bg-white dark:bg-[#1a1a1a] border border-[#dfe3e8] dark:border-gray-800 rounded-lg shadow-sm p-6;
+}
+
+/* Enhanced animations and effects */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 128, 96, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 128, 96, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 128, 96, 0);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s infinite;
+}
+
+/* Glass effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-effect {
+  background: rgba(30, 30, 30, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--shopify-grey);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--shopify-green);
+}
+
+/* Modern card hover effect */
+.modern-card-hover {
+  transition: all 0.3s ease;
+}
+
+.modern-card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 128, 96, 0.1),
+    0 10px 10px -5px rgba(0, 128, 96, 0.04);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(90deg, #008060, #00a47c);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(90deg, #00a47c, #95bf47);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Multi-color gradient text */
+.gradient-multi-text {
+  background: linear-gradient(90deg, #008060 0%, #5c6ac4 50%, #47c1bf 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.dark .gradient-multi-text {
+  background: linear-gradient(90deg, #00a47c 0%, #6e79d6 50%, #2ed0cd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Enhanced navbar styles */
+.navbar-glass {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(223, 227, 232, 0.7);
+}
+
+.dark .navbar-glass {
+  background: rgba(33, 35, 38, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Animated background */
+.animated-bg {
+  background: linear-gradient(
+    -45deg,
+    #ffffff,
+    var(--shopify-light-green),
+    var(--accent-teal-light),
+    var(--accent-purple-light)
+  );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+.dark .animated-bg {
+  background: linear-gradient(
+    -45deg,
+    #1a1a1a,
+    var(--shopify-dark-green),
+    var(--accent-teal-light),
+    var(--accent-purple-light)
+  );
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Colorful cards */
+.card-gradient-1 {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    var(--shopify-light-green) 100%
+  );
+  border: 1px solid rgba(0, 128, 96, 0.1);
+}
+
+.dark .card-gradient-1 {
+  background: linear-gradient(
+    135deg,
+    #212326 0%,
+    var(--shopify-dark-green) 100%
+  );
+  border: 1px solid rgba(0, 164, 124, 0.2);
+}
+
+.card-gradient-2 {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    var(--accent-purple-light) 100%
+  );
+  border: 1px solid rgba(92, 106, 196, 0.1);
+}
+
+.dark .card-gradient-2 {
+  background: linear-gradient(
+    135deg,
+    #212326 0%,
+    var(--accent-purple-light) 100%
+  );
+  border: 1px solid rgba(110, 121, 214, 0.2);
+}
+
+.card-gradient-3 {
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    var(--accent-teal-light) 100%
+  );
+  border: 1px solid rgba(71, 193, 191, 0.1);
+}
+
+.dark .card-gradient-3 {
+  background: linear-gradient(
+    135deg,
+    #212326 0%,
+    var(--accent-teal-light) 100%
+  );
+  border: 1px solid rgba(46, 208, 205, 0.2);
+}
+
+/* Decorative elements */
+.blob {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.blob-1 {
+  border-radius: 42% 58% 43% 57% / 76% 72% 28% 24%;
+}
+
+.blob-2 {
+  border-radius: 73% 27% 59% 41% / 57% 59% 41% 43%;
+}
+
+.blob-3 {
+  border-radius: 36% 64% 63% 37% / 43% 36% 64% 57%;
+}
+
+/* 3D button effect */
+.button-3d {
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 0 0 var(--shopify-dark-green);
+  transform: translateY(0);
+}
+
+.button-3d:active {
+  box-shadow: 0 0 0 0 var(--shopify-dark-green);
+  transform: translateY(4px);
+}
+
+.dark .button-3d {
+  box-shadow: 0 4px 0 0 rgba(0, 76, 63, 0.7);
+}
+
+.dark .button-3d:active {
+  box-shadow: 0 0 0 0 rgba(0, 76, 63, 0.7);
+}
+
+/* Colorful badges */
+.badge-purple {
+  background-color: var(--accent-purple-light);
+  color: var(--accent-purple);
+}
+
+.badge-teal {
+  background-color: var(--accent-teal-light);
+  color: var(--accent-teal);
+}
+
+.badge-yellow {
+  background-color: var(--accent-yellow);
+  color: #917700;
+}
+
+.badge-orange {
+  background-color: var(--accent-orange);
+  color: #9b5900;
+}
+
+.badge-red {
+  background-color: var(--accent-red);
+  color: #9b0500;
+}
+
+/* Colorful shadows */
+.shadow-green {
+  box-shadow: 0 4px 14px 0 rgba(0, 128, 96, 0.2);
+}
+
+.shadow-purple {
+  box-shadow: 0 4px 14px 0 rgba(92, 106, 196, 0.2);
+}
+
+.shadow-teal {
+  box-shadow: 0 4px 14px 0 rgba(71, 193, 191, 0.2);
+}
+
+.shadow-multi {
+  box-shadow: 5px 5px 15px rgba(0, 128, 96, 0.15),
+    -5px -5px 15px rgba(92, 106, 196, 0.15);
+}
+
+/* Neumorphic effect */
+.neumorphic {
+  box-shadow: 8px 8px 16px rgba(200, 200, 200, 0.2),
+    -8px -8px 16px rgba(255, 255, 255, 0.8);
+  background: linear-gradient(145deg, #f6f6f7, #ffffff);
+  border: 1px solid rgba(223, 227, 232, 0.3);
+}
+
+.dark .neumorphic {
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3),
+    -8px -8px 16px rgba(50, 50, 50, 0.1);
+  background: linear-gradient(145deg, #1a1a1a, #212326);
+  border: 1px solid rgba(50, 50, 50, 0.5);
 }
