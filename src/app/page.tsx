@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { AnalysisResult } from "@/types/critique";
@@ -137,8 +136,9 @@ export default function Home() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              Get expert UX feedback on your store's design, user experience,
-              and conversion optimization from our AI-powered analysis tool.
+              Get expert UX feedback on your store&apos;s design, user
+              experience, and conversion optimization from our AI-powered
+              analysis tool.
             </motion.p>
 
             <motion.form
@@ -243,8 +243,8 @@ export default function Home() {
                   UX Analysis
                 </h3>
                 <p className="text-[#6b7177] dark:text-gray-400 leading-relaxed">
-                  Get expert feedback on your store's user experience design and
-                  flow to reduce friction and increase sales.
+                  Get expert feedback on your store&apos;s user experience
+                  design and flow to reduce friction and increase sales.
                 </p>
                 <div className="mt-4 flex justify-end">
                   <span className="text-[#008060] dark:text-[#00a47c] text-sm font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -346,7 +346,7 @@ export default function Home() {
                 </h3>
                 <p className="text-[#6b7177] dark:text-gray-400 leading-relaxed">
                   Get practical recommendations you can implement right away to
-                  improve your store's performance.
+                  improve your store&apos;s performance.
                 </p>
                 <div className="mt-4 flex justify-end">
                   <span className="text-[#47c1bf] dark:text-[#2ed0cd] text-sm font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -449,8 +449,8 @@ export default function Home() {
                     Design & Visual Hierarchy
                   </h3>
                   <p className="text-[#6b7177] dark:text-gray-400">
-                    Evaluate your store's visual appeal, branding consistency,
-                    and overall design aesthetics.
+                    Evaluate your store&apos;s visual appeal, branding
+                    consistency, and overall design aesthetics.
                   </p>
                 </div>
               </div>

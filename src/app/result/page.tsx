@@ -16,7 +16,7 @@ export default function Result() {
     // Fetch analysis data from localStorage
     const fetchData = () => {
       try {
-        const savedUrl = localStorage.getItem("analyzedUrl");
+        // const savedUrl = localStorage.getItem("analyzedUrl");
         const savedData = localStorage.getItem("analysisResult");
 
         if (savedData) {
@@ -41,25 +41,25 @@ export default function Result() {
     fetchData();
   }, []);
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "text-[#d82c0d]";
-      case "medium":
-        return "text-[#f49342]";
-      case "low":
-        return "text-[#8a8a8a]";
-      default:
-        return "text-[#6b7177]";
-    }
-  };
+  // const getPriorityColor = (priority: string) => {
+  //   switch (priority) {
+  //     case "high":
+  //       return "text-[#d82c0d]";
+  //     case "medium":
+  //       return "text-[#f49342]";
+  //     case "low":
+  //       return "text-[#8a8a8a]";
+  //     default:
+  //       return "text-[#6b7177]";
+  //   }
+  // };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 8) return "bg-[#008060]";
-    if (score >= 6) return "bg-[#95bf47]";
-    if (score >= 4) return "bg-[#f49342]";
-    return "bg-[#d82c0d]";
-  };
+  // const getScoreColor = (score: number) => {
+  //   if (score >= 8) return "bg-[#008060]";
+  //   if (score >= 6) return "bg-[#95bf47]";
+  //   if (score >= 4) return "bg-[#f49342]";
+  //   return "bg-[#d82c0d]";
+  // };
 
   const getScoreLabel = (score: number) => {
     if (score >= 8) return "Excellent";
@@ -190,8 +190,8 @@ export default function Result() {
                     Analyzing your store...
                   </p>
                   <p className="text-[#6b7177] dark:text-gray-400 text-center max-w-md">
-                    We're thoroughly examining your Shopify store to provide you
-                    with detailed insights and recommendations.
+                    We&apos;re thoroughly examining your Shopify store to
+                    provide you with detailed insights and recommendations.
                   </p>
                 </div>
               </div>
