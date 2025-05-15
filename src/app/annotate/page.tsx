@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import AnnotatedScreenshot from "@/components/AnnotatedScreenshot";
 import ExportAnnotated from "@/components/ExportAnnotated";
 import AnnotationHelper from "@/components/AnnotationHelper";
+import { useRouter } from "next/navigation";
 
 interface Annotation {
   id: string;
@@ -15,17 +16,51 @@ interface Annotation {
 }
 
 export default function AnnotatePage() {
-  const [url, setUrl] = useState("");
+  const [url] = useState("");
   const [screenshotUrl, setScreenshotUrl] = useState<string | null>(null);
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropAreaRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
-  const takeScreenshot = async () => {
-    if (!url) {
-      setError("Please enter a URL");
+  // Debug Effect to monitor state changes
+  useEffect(() => {
+    console.log(
+      "State changed - isLoading:",
+      isLoading,
+      "screenshotUrl:",
+      screenshotUrl ? "present" : "null"
+    );
+  }, [isLoading, screenshotUrl]);
+
+  // Effect to ensure loading state is reset if it gets stuck
+  useEffect(() => {
+    let loadingTimeout: NodeJS.Timeout;
+
+    if (isLoading) {
+      // If loading takes more than 10 seconds, we consider it stuck
+      loadingTimeout = setTimeout(() => {
+        console.warn("Loading timeout triggered - resetting loading state");
+        setIsLoading(false);
+        setError("Loading timed out. Please try again.");
+      }, 10000);
+    }
+
+    return () => {
+      if (loadingTimeout) {
+        clearTimeout(loadingTimeout);
+      }
+    };
+  }, [isLoading]);
+
+  const handleImageUpload = async (file: File) => {
+    if (!file) {
+      setError("No file selected");
       return;
     }
 
@@ -33,38 +68,147 @@ export default function AnnotatePage() {
       setIsLoading(true);
       setError(null);
       setAnnotations([]); // Clear previous annotations
+      setScreenshotUrl(null); // Reset previous screenshot
 
-      // Add https if not present
-      let targetUrl = url;
-      if (
-        !targetUrl.startsWith("http://") &&
-        !targetUrl.startsWith("https://")
-      ) {
-        targetUrl = `https://${targetUrl}`;
+      console.log("Starting image upload for file:", file.name);
+
+      // Validate file size
+      if (file.size > 10 * 1024 * 1024) {
+        // 10MB limit
+        throw new Error("File too large. Please select an image under 10MB.");
       }
 
-      const response = await fetch("/api/screenshot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: targetUrl }),
+      // Create FormData
+      const formData = new FormData();
+      formData.append("image", file);
+
+      // Function to handle the API request with a retry
+      const uploadWithRetry = async (
+        retryCount = 0
+      ): Promise<{ imageBase64?: string; error?: string }> => {
+        try {
+          console.log(
+            `Sending request to /api/screenshot (attempt ${retryCount + 1})`
+          );
+          const response = await fetch("/api/screenshot", {
+            method: "POST",
+            body: formData,
+          });
+
+          console.log(
+            "Response received:",
+            response.status,
+            response.statusText
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Failed to upload image: ${response.status} ${response.statusText}`
+            );
+          }
+
+          console.log("Parsing response JSON");
+          return await response.json();
+        } catch (error) {
+          if (retryCount < 2) {
+            // Allow 3 attempts total
+            console.log(`Retry attempt ${retryCount + 1} after error:`, error);
+            return uploadWithRetry(retryCount + 1);
+          }
+          throw error;
+        }
+      };
+
+      // Get the JSON response with base64 data
+      const data = await uploadWithRetry();
+      console.log("Response data received:", Object.keys(data).join(", "));
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      if (!data.imageBase64) {
+        throw new Error("No image data received");
+      }
+
+      // Validate the received base64 data
+      if (!data.imageBase64.startsWith("data:image/")) {
+        throw new Error("Invalid image data format received");
+      }
+
+      // Preload the image to ensure it's valid
+      await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          console.log("Image successfully loaded");
+          resolve(true);
+        };
+        img.onerror = () => {
+          reject(new Error("Failed to load the image"));
+        };
+        if (!data.imageBase64) {
+          reject(new Error("No image data received"));
+          return;
+        }
+        img.src = data.imageBase64;
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to take screenshot");
-      }
-
-      // Convert the blob to base64 data URL
-      const blob = await response.blob();
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Data = reader.result as string;
-        setScreenshotUrl(base64Data);
-        setIsLoading(false);
-      };
-      reader.readAsDataURL(blob);
+      console.log("Setting screenshot URL with base64 data");
+      setScreenshotUrl(data.imageBase64);
     } catch (err) {
-      setError((err as Error).message || "Failed to take screenshot");
+      console.error("Image upload error:", err);
+      setError((err as Error).message || "Failed to upload image");
+    } finally {
+      console.log("Setting isLoading to false");
       setIsLoading(false);
+    }
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
+
+  const takeScreenshot = async () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Drag and drop handlers
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length) {
+      const file = files[0];
+      // Check if it's an image
+      if (file.type.startsWith("image/")) {
+        handleImageUpload(file);
+      } else {
+        setError("Please upload an image file");
+      }
     }
   };
 
@@ -78,10 +222,22 @@ export default function AnnotatePage() {
       setIsAnalyzing(true);
       setError(null);
 
+      // Get the dimensions from the AnnotatedScreenshot component
+      const imageWidth = 1200; // Match the width we set for AnnotatedScreenshot
+      const imageHeight = 900; // Match the height we set for AnnotatedScreenshot
+
+      console.log(
+        `Analyzing screenshot with dimensions: ${imageWidth}x${imageHeight}`
+      );
+
       const response = await fetch("/api/analyze-screenshot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageBase64: screenshotUrl }),
+        body: JSON.stringify({
+          imageBase64: screenshotUrl,
+          width: imageWidth,
+          height: imageHeight,
+        }),
       });
 
       if (!response.ok) {
@@ -205,6 +361,29 @@ export default function AnnotatePage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
+          <div className="flex items-center mb-6">
+            <a
+              onClick={() => router.push("/")}
+              className="flex items-center text-[#008060] dark:text-[#00a47c] cursor-pointer hover:underline transition-all group"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+              Back to home
+            </a>
+          </div>
+
           <h1 className="text-3xl font-bold mb-2 text-[#212326] dark:text-white flex items-center">
             <svg
               className="w-8 h-8 mr-3 text-[#008060]"
@@ -228,127 +407,139 @@ export default function AnnotatePage() {
           </p>
         </motion.div>
 
-        <motion.div
-          className="mb-8 bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md border border-[#dfe3e8] dark:border-gray-800"
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <div className="flex flex-col sm:flex-row gap-4 mb-4">
-            <div className="flex-1 relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="h-5 w-5 text-[#6b7177]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="Enter website URL (e.g. mystore.com)"
-                className="w-full pl-10 pr-4 py-3 border border-[#dfe3e8] dark:border-gray-700 rounded-lg focus:ring-[#008060] focus:border-[#008060] bg-white dark:bg-[#212326] text-[#212326] dark:text-white transition-all duration-200"
-              />
-            </div>
-            <motion.button
-              onClick={takeScreenshot}
-              disabled={isLoading}
-              className="px-6 py-3 text-white rounded-lg button-3d bg-[#008060] hover:bg-[#006e52] disabled:bg-gray-400 disabled:transform-none disabled:box-shadow-none transition-all duration-200 flex items-center justify-center"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              {isLoading ? (
-                <>
-                  <svg
-                    className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Capturing...
-                </>
-              ) : (
-                <>
-                  <svg
-                    className="mr-2 h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  Take Screenshot
-                </>
-              )}
-            </motion.button>
-          </div>
+        {/* Hidden file input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileInputChange}
+          className="hidden"
+          accept="image/*"
+        />
 
-          {error && (
-            <motion.div
-              className="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-[#2c1a1a] dark:text-red-400"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+        {!screenshotUrl ? (
+          <motion.div
+            className="mb-8"
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <div
+              ref={dropAreaRef}
+              className={`w-full h-80 border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
+                isDragging
+                  ? "border-[#008060] bg-[#f1f8f6] dark:bg-[#0a2922]"
+                  : "border-[#dfe3e8] dark:border-gray-700 bg-white dark:bg-[#1a1a1a]"
+              }`}
+              onClick={takeScreenshot}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
             >
               <svg
-                className="flex-shrink-0 inline w-5 h-5 mr-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
+                className={`w-16 h-16 mb-4 transition-all duration-200 ${
+                  isDragging
+                    ? "text-[#008060]"
+                    : "text-[#6b7177] dark:text-gray-400"
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.5"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
               </svg>
-              {error}
-            </motion.div>
-          )}
-        </motion.div>
+              <p className="text-lg font-medium text-[#212326] dark:text-white mb-2">
+                Drag & drop your screenshot here
+              </p>
+              <p className="text-sm text-[#6b7177] dark:text-gray-400 mb-4">
+                or click to browse your files
+              </p>
+              <button
+                className="px-4 py-2 bg-[#008060] hover:bg-[#006e52] text-white rounded-lg shadow-sm flex items-center transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  takeScreenshot();
+                }}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <svg
+                      className="animate-spin mr-2 h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="mr-2 h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Select Image
+                  </>
+                )}
+              </button>
+            </div>
 
-        {screenshotUrl ? (
+            {error && (
+              <motion.div
+                className="flex items-center p-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-[#2c1a1a] dark:text-red-400"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <svg
+                  className="flex-shrink-0 inline w-5 h-5 mr-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                </svg>
+                {error}
+              </motion.div>
+            )}
+          </motion.div>
+        ) : (
           <motion.div
-            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            className="flex flex-col gap-8"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
             <motion.div
-              className="lg:col-span-2 bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md border border-[#dfe3e8] dark:border-gray-800"
+              className="bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md border border-[#dfe3e8] dark:border-gray-800"
               variants={itemVariants}
             >
               <div className="mb-4 pb-4 border-b border-[#dfe3e8] dark:border-gray-700">
@@ -360,12 +551,12 @@ export default function AnnotatePage() {
                 </p>
               </div>
 
-              <div className="relative rounded-lg overflow-hidden border border-[#dfe3e8] dark:border-gray-700 shadow-inner bg-[#f6f6f7] dark:bg-[#212326]">
+              <div className="relative rounded-lg overflow-hidden border border-[#dfe3e8] dark:border-gray-700 shadow-inner bg-[#f6f6f7] dark:bg-[#212326] max-w-full mx-auto">
                 <AnnotatedScreenshot
                   imageUrl={screenshotUrl}
                   annotations={annotations}
-                  width={800}
-                  height={600}
+                  width={1200}
+                  height={900}
                   onAnnotationAdd={handleAddAnnotation}
                   onAnnotationUpdate={handleUpdateAnnotation}
                   onAnnotationDelete={handleDeleteAnnotation}
@@ -480,7 +671,7 @@ export default function AnnotatePage() {
             </motion.div>
 
             <motion.div
-              className="bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md border border-[#dfe3e8] dark:border-gray-800 h-fit"
+              className="bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md border border-[#dfe3e8] dark:border-gray-800"
               variants={itemVariants}
             >
               <div className="mb-4 pb-4 border-b border-[#dfe3e8] dark:border-gray-700">
@@ -531,7 +722,7 @@ export default function AnnotatePage() {
                   </p>
                 </div>
               ) : (
-                <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                   {annotations.map((anno, index) => (
                     <motion.div
                       key={anno.id}
@@ -596,44 +787,6 @@ export default function AnnotatePage() {
                 <AnnotationHelper onSelectTemplate={handleSelectTemplate} />
               </div>
             </motion.div>
-          </motion.div>
-        ) : (
-          <motion.div
-            className="text-center py-12 bg-white dark:bg-[#1a1a1a] rounded-xl shadow-md border border-[#dfe3e8] dark:border-gray-800"
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <div className="flex justify-center items-center mb-6">
-              <div className="w-20 h-20 bg-[#f6f6f7] dark:bg-[#212326] rounded-full flex items-center justify-center animate-pulse">
-                <svg
-                  className="h-10 w-10 text-[#008060]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-            </div>
-            <h2 className="text-xl font-semibold text-[#212326] dark:text-white mb-3">
-              Ready to Capture
-            </h2>
-            <p className="text-[#6b7177] dark:text-gray-400 max-w-lg mx-auto">
-              Enter a website URL above and click &quot;Take Screenshot&quot; to
-              begin annotating and analyzing the page.
-            </p>
           </motion.div>
         )}
       </motion.div>

@@ -60,27 +60,28 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white to-[#f6f6f7] dark:from-[#212326] dark:to-[#1a1a1a]">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white to-[#f6f6f7] dark:from-[#181a1d] dark:to-[#0f0f0f]">
       {/* Enhanced Navigation with Colorful Elements */}
 
       {/* Hero Section - Enhanced with Creative Elements */}
       <motion.section
-        className="shopify-section relative overflow-hidden pt-16 pb-24 border-b border-[#dfe3e8] dark:border-transparent animated-bg"
+        className="shopify-section relative overflow-hidden pt-24 pb-32 border-b border-[#dfe3e8]/50 dark:border-gray-800/30 animated-bg"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         {/* Background decorative elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute -top-24 -right-24 w-96 h-96 blob-1 bg-[#d1e8e0] dark:bg-[#004c3f]/20 blur-3xl opacity-60"></div>
-          <div className="absolute -bottom-32 -left-32 w-96 h-96 blob-2 bg-[#b3bcf5] dark:bg-[#444b77]/20 blur-3xl opacity-40"></div>
-          <div className="absolute top-1/3 right-1/4 w-64 h-64 blob-3 bg-[#b7ecec] dark:bg-[#216e6c]/20 blur-3xl opacity-30"></div>
+          <div className="absolute -top-24 -right-24 w-[30rem] h-[30rem] blob-1 bg-[#d1e8e0]/70 dark:bg-[#004c3f]/25 blur-[100px] opacity-70"></div>
+          <div className="absolute -bottom-32 -left-32 w-[28rem] h-[28rem] blob-2 bg-[#b3bcf5]/70 dark:bg-[#444b77]/25 blur-[100px] opacity-50"></div>
+          <div className="absolute top-1/3 right-1/4 w-[25rem] h-[25rem] blob-3 bg-[#b7ecec]/70 dark:bg-[#216e6c]/25 blur-[100px] opacity-40"></div>
 
           <motion.div
-            className="absolute top-1/4 right-1/3 w-4 h-4 bg-[#008060] rounded-full"
+            className="absolute top-1/4 right-1/3 w-5 h-5 bg-[#008060] rounded-full"
             animate={{
               y: [0, 20, 0],
               opacity: [0.6, 1, 0.6],
+              scale: [1, 1.2, 1],
             }}
             transition={{
               repeat: Infinity,
@@ -89,10 +90,11 @@ export default function Home() {
             }}
           ></motion.div>
           <motion.div
-            className="absolute bottom-1/3 left-1/4 w-6 h-6 bg-[#5c6ac4] rounded-full"
+            className="absolute bottom-1/3 left-1/4 w-7 h-7 bg-[#5c6ac4] rounded-full"
             animate={{
               y: [0, -30, 0],
               opacity: [0.6, 1, 0.6],
+              scale: [1, 1.3, 1],
             }}
             transition={{
               repeat: Infinity,
@@ -101,14 +103,45 @@ export default function Home() {
             }}
           ></motion.div>
           <motion.div
-            className="absolute top-2/3 right-1/4 w-5 h-5 bg-[#47c1bf] rounded-full"
+            className="absolute top-2/3 right-1/4 w-6 h-6 bg-[#47c1bf] rounded-full"
             animate={{
               y: [0, 25, 0],
               opacity: [0.6, 1, 0.6],
+              scale: [1, 1.2, 1],
             }}
             transition={{
               repeat: Infinity,
               duration: 6,
+              ease: "easeInOut",
+            }}
+          ></motion.div>
+
+          {/* Subtle grid overlay */}
+          <div className="absolute inset-0 bg-grid-pattern opacity-5 dark:opacity-10"></div>
+
+          {/* Floating shapes */}
+          <motion.div
+            className="absolute top-[20%] left-[10%] w-16 h-16 bg-transparent border-2 border-[#008060]/30 dark:border-[#00a47c]/30 rounded-xl rotate-12"
+            animate={{
+              rotate: [12, -5, 12],
+              y: [0, 15, 0],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 8,
+              ease: "easeInOut",
+            }}
+          ></motion.div>
+
+          <motion.div
+            className="absolute bottom-[25%] right-[15%] w-12 h-12 bg-transparent border-2 border-[#5c6ac4]/30 dark:border-[#6e79d6]/30 rounded-full"
+            animate={{
+              scale: [1, 1.2, 1],
+              x: [0, -15, 0],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 9,
               ease: "easeInOut",
             }}
           ></motion.div>
@@ -117,34 +150,34 @@ export default function Home() {
         <div className="shopify-container relative z-10">
           <div className="max-w-5xl mx-auto">
             <motion.div
-              className="flex justify-center mb-4"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1, duration: 0.5 }}
+              className="flex justify-center mb-6"
+              initial={{ opacity: 0, scale: 0.8, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.6 }}
             >
-              <span className="px-4 py-1.5 bg-white dark:bg-[#1a1a1a] text-sm font-medium text-[#5c6ac4] dark:text-[#6e79d6] rounded-full shadow-purple flex items-center">
-                <span className="w-2 h-2 bg-[#5c6ac4] dark:bg-[#6e79d6] rounded-full mr-2"></span>
+              <span className="px-5 py-2 bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-sm text-sm font-medium text-[#5c6ac4] dark:text-[#6e79d6] rounded-full shadow-xl shadow-purple/10 flex items-center">
+                <span className="w-2.5 h-2.5 bg-[#5c6ac4] dark:bg-[#6e79d6] rounded-full mr-2.5 animate-pulse"></span>
                 AI-Powered Store Analysis
               </span>
             </motion.div>
 
             <motion.h1
-              className="shopify-heading text-center text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight"
-              initial={{ y: 20, opacity: 0 }}
+              className="shopify-heading text-center text-5xl sm:text-6xl md:text-7xl font-extrabold mb-8 leading-tight tracking-tight"
+              initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
             >
               Analyze your Shopify store
-              <span className="gradient-multi-text block mt-2">
+              <span className="gradient-multi-text block mt-3 bg-clip-text text-transparent bg-gradient-to-r from-[#008060] via-[#5c6ac4] to-[#47c1bf]">
                 for maximum conversion
               </span>
             </motion.h1>
 
             <motion.p
-              className="shopify-subheading text-center mb-10 max-w-3xl mx-auto text-lg md:text-xl"
-              initial={{ y: 20, opacity: 0 }}
+              className="shopify-subheading text-center mb-12 max-w-3xl mx-auto text-lg md:text-xl text-[#4a4a4a] dark:text-gray-300 leading-relaxed"
+              initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
             >
               Get expert UX feedback on your store&apos;s design, user
               experience, and conversion optimization from our AI-powered
@@ -153,10 +186,10 @@ export default function Home() {
 
             <motion.form
               onSubmit={handleSubmit}
-              className="max-w-2xl mx-auto mb-8"
-              initial={{ y: 20, opacity: 0 }}
+              className="max-w-2xl mx-auto mb-12"
+              initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
             >
               <div className="flex flex-col md:flex-row gap-3 relative">
                 <input
@@ -164,14 +197,16 @@ export default function Home() {
                   placeholder="Enter your store URL (e.g. mystore.com)"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  className="flex-grow rounded-lg border border-[#dfe3e8] dark:border-gray-700 bg-white dark:bg-[#1a1a1a] px-4 py-4 text-base focus:outline-none focus:ring-2 focus:ring-[#5c6ac4] dark:focus:ring-[#6e79d6] shadow-lg neumorphic"
+                  className="flex-grow text-black rounded-xl border border-[#dfe3e8]/70 dark:border-gray-700/70 bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-sm px-5 py-4 text-base focus:outline-none focus:ring-2 focus:ring-[#5c6ac4] dark:focus:ring-[#6e79d6] shadow-xl transition-all duration-300"
                   required
+                  aria-describedby="url-help"
                 />
                 <Button
                   type="submit"
-                  className="bg-gradient-to-r from-[#5c6ac4] to-[#47c1bf] hover:from-[#47c1bf] hover:to-[#5c6ac4] text-white rounded-lg font-medium px-6 py-4 shadow-purple transition-all duration-300"
+                  className="bg-gradient-to-r from-[#5c6ac4] to-[#47c1bf] hover:from-[#47c1bf] hover:to-[#5c6ac4] text-white rounded-xl font-medium px-8 py-4 shadow-xl hover:shadow-2xl shadow-[#5c6ac4]/20 hover:shadow-[#47c1bf]/30 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 relative overflow-hidden group"
                   disabled={isSubmitting}
                 >
+                  <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
                   {isSubmitting ? (
                     <div className="flex items-center">
                       <svg
@@ -216,27 +251,71 @@ export default function Home() {
                   )}
                 </Button>
               </div>
+
+              <div
+                className="mt-3 px-1 text-sm text-[#6b7177] dark:text-gray-400"
+                id="url-help"
+              >
+                <div className="flex items-start space-x-2 mb-2">
+                  <svg
+                    className="w-4 h-4 text-[#5c6ac4] mt-0.5 flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>
+                    Enter your full Shopify store URL (with or without https://)
+                  </span>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <svg
+                    className="w-4 h-4 text-[#008060] mt-0.5 flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                  </svg>
+                  <span>
+                    Your store data is analyzed securely and never shared
+                  </span>
+                </div>
+              </div>
+
               {error && <p className="text-[#d82c0d] mt-2 text-sm">{error}</p>}
             </motion.form>
 
             <motion.div
-              className="flex flex-col items-center justify-center gap-4 mb-16"
+              className="flex flex-col items-center justify-center gap-4 mb-20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
             >
-              <div className="h-px w-24 bg-gray-200 dark:bg-gray-700"></div>
+              <div className="h-px w-24 bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent"></div>
               <p className="text-center text-sm text-gray-600 dark:text-gray-400">
                 or try our visual feedback tool
               </p>
               <Link href="/annotate">
                 <motion.button
-                  className="group flex items-center gap-2 px-6 py-3 bg-white dark:bg-[#1a1a1a] border border-[#dfe3e8] dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
-                  whileHover={{ scale: 1.02 }}
+                  className="group relative flex items-center gap-3 px-7 py-3.5 bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-sm border border-[#dfe3e8]/70 dark:border-gray-800/70 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                  whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                 >
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#5c6ac4]/10 to-[#47c1bf]/10 dark:from-[#5c6ac4]/20 dark:to-[#47c1bf]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <svg
-                    className="w-5 h-5 text-[#5c6ac4] group-hover:scale-110 transition-transform duration-300"
+                    className="w-5 h-5 text-[#5c6ac4] relative z-10 group-hover:scale-110 transition-transform duration-300"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -254,7 +333,7 @@ export default function Home() {
                       d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  <span className="font-medium text-[#212326] dark:text-white">
+                  <span className="font-medium text-[#212326] dark:text-white relative z-10">
                     Capture & Annotate Screenshots
                   </span>
                 </motion.button>
@@ -263,19 +342,19 @@ export default function Home() {
           </div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8"
-            initial={{ y: 30, opacity: 0 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-10"
+            initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            transition={{ delay: 0.7, duration: 0.7 }}
           >
             <motion.div
-              className="card-gradient-1 group hover:shadow-xl hover:translate-y-[-5px] transition-all duration-300 border-2 relative overflow-hidden rounded-2xl p-7"
+              className="card-gradient-1 group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 border-[#d1e8e0]/50 dark:border-[#004c3f]/30 relative overflow-hidden rounded-2xl p-8"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <div className="absolute -top-10 -right-10 w-32 h-32 blob-1 bg-[#008060]/10 rotate-45"></div>
+              <div className="absolute -top-10 -right-10 w-40 h-40 blob-1 bg-[#008060]/20 dark:bg-[#008060]/10 rotate-45 backdrop-blur-md"></div>
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-white dark:bg-[#212326] rounded-2xl shadow-green flex items-center justify-center mb-5 text-[#008060] dark:text-[#00a47c] transform group-hover:rotate-12 transition-all duration-500">
+                <div className="w-16 h-16 bg-gradient-to-br from-white to-[#f6f6f7] dark:from-[#212326] dark:to-[#1a1a1a] rounded-2xl shadow-green flex items-center justify-center mb-6 text-[#008060] dark:text-[#00a47c] transform group-hover:rotate-12 transition-all duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-8 w-8"
@@ -298,7 +377,7 @@ export default function Home() {
                   Get expert feedback on your store&apos;s user experience
                   design and flow to reduce friction and increase sales.
                 </p>
-                <div className="mt-4 flex justify-end">
+                <div className="mt-5 flex justify-end">
                   <span className="text-[#008060] dark:text-[#00a47c] text-sm font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     Learn more
                     <svg
@@ -320,13 +399,13 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              className="card-gradient-2 group hover:shadow-xl hover:translate-y-[-5px] transition-all duration-300 border-2 relative overflow-hidden rounded-2xl p-7"
+              className="card-gradient-2 group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 border-[#b3bcf5]/50 dark:border-[#444b77]/30 relative overflow-hidden rounded-2xl p-8"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <div className="absolute -top-10 -right-10 w-32 h-32 blob-2 bg-[#5c6ac4]/10 rotate-45"></div>
+              <div className="absolute -top-10 -right-10 w-40 h-40 blob-2 bg-[#5c6ac4]/20 dark:bg-[#5c6ac4]/10 rotate-45 backdrop-blur-md"></div>
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-white dark:bg-[#212326] rounded-2xl shadow-purple flex items-center justify-center mb-5 text-[#5c6ac4] dark:text-[#6e79d6] transform group-hover:rotate-12 transition-all duration-500">
+                <div className="w-16 h-16 bg-gradient-to-br from-white to-[#f6f6f7] dark:from-[#212326] dark:to-[#1a1a1a] rounded-2xl shadow-purple flex items-center justify-center mb-6 text-[#5c6ac4] dark:text-[#6e79d6] transform group-hover:rotate-12 transition-all duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-8 w-8"
@@ -349,7 +428,7 @@ export default function Home() {
                   Identify issues that might be hurting your conversion rates
                   and get actionable recommendations.
                 </p>
-                <div className="mt-4 flex justify-end">
+                <div className="mt-5 flex justify-end">
                   <span className="text-[#5c6ac4] dark:text-[#6e79d6] text-sm font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     Learn more
                     <svg
@@ -371,13 +450,13 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              className="card-gradient-3 group hover:shadow-xl hover:translate-y-[-5px] transition-all duration-300 border-2 relative overflow-hidden rounded-2xl p-7"
+              className="card-gradient-3 group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border-2 border-[#b7ecec]/50 dark:border-[#216e6c]/30 relative overflow-hidden rounded-2xl p-8"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <div className="absolute -top-10 -right-10 w-32 h-32 blob-3 bg-[#47c1bf]/10 rotate-45"></div>
+              <div className="absolute -top-10 -right-10 w-40 h-40 blob-3 bg-[#47c1bf]/20 dark:bg-[#47c1bf]/10 rotate-45 backdrop-blur-md"></div>
               <div className="relative z-10">
-                <div className="w-16 h-16 bg-white dark:bg-[#212326] rounded-2xl shadow-teal flex items-center justify-center mb-5 text-[#47c1bf] dark:text-[#2ed0cd] transform group-hover:rotate-12 transition-all duration-500">
+                <div className="w-16 h-16 bg-gradient-to-br from-white to-[#f6f6f7] dark:from-[#212326] dark:to-[#1a1a1a] rounded-2xl shadow-teal flex items-center justify-center mb-6 text-[#47c1bf] dark:text-[#2ed0cd] transform group-hover:rotate-12 transition-all duration-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-8 w-8"
@@ -400,7 +479,7 @@ export default function Home() {
                   Get practical recommendations you can implement right away to
                   improve your store&apos;s performance.
                 </p>
-                <div className="mt-4 flex justify-end">
+                <div className="mt-5 flex justify-end">
                   <span className="text-[#47c1bf] dark:text-[#2ed0cd] text-sm font-medium flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     Learn more
                     <svg
@@ -425,13 +504,17 @@ export default function Home() {
       </motion.section>
 
       {/* Features Section - Enhanced */}
-      <section className="shopify-section bg-white dark:bg-[#212326] relative overflow-hidden py-24">
+      <section className="shopify-section bg-gradient-to-b from-white to-[#f9f9fb] dark:from-[#212326] dark:to-[#181a1d] relative overflow-hidden py-32">
         {/* Background decorative elements */}
         <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-40 left-20 w-72 h-72 blob-2 bg-[#d1e8e0]/30 dark:bg-[#004c3f]/10 blur-2xl"></div>
-          <div className="absolute bottom-40 right-20 w-72 h-72 blob-1 bg-[#b3bcf5]/30 dark:bg-[#5c6ac4]/10 blur-2xl"></div>
+          <div className="absolute top-40 left-20 w-96 h-96 blob-2 bg-[#d1e8e0]/20 dark:bg-[#004c3f]/10 blur-[80px] opacity-70"></div>
+          <div className="absolute bottom-40 right-20 w-96 h-96 blob-1 bg-[#b3bcf5]/20 dark:bg-[#5c6ac4]/10 blur-[80px] opacity-70"></div>
+
+          {/* Subtle pattern */}
+          <div className="absolute inset-0 bg-gradient-pattern opacity-[0.03] dark:opacity-[0.05]"></div>
+
           <svg
-            className="absolute top-0 right-0 text-[#f6f6f7] dark:text-[#1a1a1a] w-full h-auto opacity-70"
+            className="absolute top-0 right-0 text-[#f6f6f7] dark:text-[#1a1a1a] w-full h-auto opacity-50"
             fill="currentColor"
             viewBox="0 0 600 600"
           >
@@ -440,9 +523,9 @@ export default function Home() {
         </div>
 
         <div className="shopify-container relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <motion.span
-              className="inline-block text-[#008060] dark:text-[#00a47c] font-medium mb-3 bg-[#d1e8e0] dark:bg-[#004c3f]/20 px-4 py-1 rounded-full text-sm"
+              className="inline-block text-[#008060] dark:text-[#00a47c] font-medium mb-4 bg-[#d1e8e0]/60 dark:bg-[#004c3f]/30 px-5 py-1.5 rounded-full text-sm shadow-sm"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -451,7 +534,7 @@ export default function Home() {
               WHY MYSTERY SHOPPER
             </motion.span>
             <motion.h2
-              className="shopify-heading mb-6 gradient-multi-text"
+              className="shopify-heading mb-6 gradient-multi-text text-4xl md:text-5xl lg:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#008060] via-[#5c6ac4] to-[#47c1bf]"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -460,7 +543,7 @@ export default function Home() {
               Get a complete analysis of your store
             </motion.h2>
             <motion.p
-              className="shopify-subheading max-w-3xl mx-auto"
+              className="shopify-subheading max-w-3xl mx-auto text-lg text-[#4a4a4a] dark:text-gray-300"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -471,19 +554,19 @@ export default function Home() {
             </motion.p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-16 lg:gap-20 items-center">
             <motion.div
               className="flex flex-col justify-center"
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.6 }}
             >
-              <div className="flex items-start mb-8 bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
-                <div className="mt-1 mr-5 w-12 h-12 bg-[#d1e8e0] dark:bg-[#004c3f]/50 rounded-full flex items-center justify-center flex-shrink-0 text-[#008060] dark:text-[#00a47c]">
+              <div className="flex items-start mb-10 bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-sm p-7 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="mt-1 mr-6 w-14 h-14 bg-gradient-to-br from-[#d1e8e0] to-[#9cdcc0] dark:from-[#004c3f]/50 dark:to-[#008060]/50 rounded-xl flex items-center justify-center flex-shrink-0 text-[#008060] dark:text-[#00a47c] shadow-lg shadow-[#008060]/10">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-7 w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -497,21 +580,21 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-[#212326] dark:text-white">
+                  <h3 className="text-xl font-bold mb-3 text-[#212326] dark:text-white">
                     Design & Visual Hierarchy
                   </h3>
-                  <p className="text-[#6b7177] dark:text-gray-400">
+                  <p className="text-[#6b7177] dark:text-gray-400 leading-relaxed">
                     Evaluate your store&apos;s visual appeal, branding
                     consistency, and overall design aesthetics.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start mb-8 bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-[#dfe3e8] dark:border-gray-800">
-                <div className="mt-1 mr-5 w-12 h-12 bg-[#d1e8e0] dark:bg-[#004c3f]/50 rounded-full flex items-center justify-center flex-shrink-0 text-[#008060] dark:text-[#00a47c]">
+              <div className="flex items-start mb-10 bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-sm p-7 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-[#dfe3e8]/30 dark:border-gray-800/30">
+                <div className="mt-1 mr-6 w-14 h-14 bg-gradient-to-br from-[#d1e8e0] to-[#9cdcc0] dark:from-[#004c3f]/50 dark:to-[#008060]/50 rounded-xl flex items-center justify-center flex-shrink-0 text-[#008060] dark:text-[#00a47c] shadow-lg shadow-[#008060]/10">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-7 w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -525,21 +608,21 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-[#212326] dark:text-white">
+                  <h3 className="text-xl font-bold mb-3 text-[#212326] dark:text-white">
                     User Experience & Navigation
                   </h3>
-                  <p className="text-[#6b7177] dark:text-gray-400">
+                  <p className="text-[#6b7177] dark:text-gray-400 leading-relaxed">
                     Analyze user flow, navigation structure, and ease of use to
                     reduce customer friction.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start bg-white dark:bg-[#1a1a1a] p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-[#dfe3e8] dark:border-gray-800">
-                <div className="mt-1 mr-5 w-12 h-12 bg-[#d1e8e0] dark:bg-[#004c3f]/50 rounded-full flex items-center justify-center flex-shrink-0 text-[#008060] dark:text-[#00a47c]">
+              <div className="flex items-start bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-sm p-7 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-[#dfe3e8]/30 dark:border-gray-800/30">
+                <div className="mt-1 mr-6 w-14 h-14 bg-gradient-to-br from-[#d1e8e0] to-[#9cdcc0] dark:from-[#004c3f]/50 dark:to-[#008060]/50 rounded-xl flex items-center justify-center flex-shrink-0 text-[#008060] dark:text-[#00a47c] shadow-lg shadow-[#008060]/10">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-7 w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -553,10 +636,10 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-[#212326] dark:text-white">
+                  <h3 className="text-xl font-bold mb-3 text-[#212326] dark:text-white">
                     Conversion Optimization
                   </h3>
-                  <p className="text-[#6b7177] dark:text-gray-400">
+                  <p className="text-[#6b7177] dark:text-gray-400 leading-relaxed">
                     Identify barriers to purchase and get recommendations to
                     improve conversion rates.
                   </p>
@@ -565,41 +648,48 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              className="bg-gradient-to-br from-[#f6f6f7] to-white dark:from-[#1a1a1a] dark:to-[#212326] rounded-2xl p-8 lg:p-10 shadow-xl border border-[#dfe3e8] dark:border-gray-800 relative overflow-hidden"
+              className="bg-gradient-to-br from-white/90 to-[#f9f9fb]/90 dark:from-[#1a1a1a]/90 dark:to-[#212326]/90 backdrop-blur-md rounded-3xl p-8 lg:p-10 shadow-2xl border border-[#dfe3e8]/30 dark:border-gray-800/30 relative overflow-hidden group hover:shadow-[0_20px_80px_-10px_rgba(0,128,96,0.3)] dark:hover:shadow-[0_20px_80px_-10px_rgba(0,128,96,0.2)] transition-all duration-500"
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#d1e8e0] dark:bg-[#004c3f]/20 rounded-full blur-3xl -mr-20 -mt-20 opacity-50"></div>
+              <div className="absolute -top-10 -right-10 w-60 h-60 bg-[#d1e8e0]/50 dark:bg-[#004c3f]/20 rounded-full blur-3xl opacity-0 group-hover:opacity-80 transition-opacity duration-700"></div>
               <div className="relative z-10">
-                <div className="aspect-w-16 aspect-h-9 bg-[#008060]/10 dark:bg-[#008060]/20 rounded-xl mb-8 overflow-hidden">
+                <div className="aspect-w-16 aspect-h-9 bg-[#008060]/10 dark:bg-[#008060]/20 rounded-2xl mb-10 overflow-hidden shadow-inner group-hover:shadow-xl transition-shadow duration-300">
                   <div className="flex items-center justify-center h-full p-8">
-                    <div className="bg-white dark:bg-[#212326] p-6 rounded-lg shadow-lg w-full max-w-md">
-                      <div className="flex items-center justify-between mb-4">
+                    <div className="bg-white/90 dark:bg-[#212326]/90 backdrop-blur-sm p-7 rounded-xl shadow-2xl transform group-hover:scale-105 transition-transform duration-500 w-full max-w-md">
+                      <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center">
-                          <div className="w-8 h-8 bg-[#008060] rounded-full text-white flex items-center justify-center mr-3 text-sm font-bold">
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#008060] to-[#00a47c] rounded-lg text-white flex items-center justify-center mr-3 text-sm font-bold shadow-lg shadow-[#008060]/20">
                             8.5
                           </div>
-                          <h4 className="font-semibold text-[#212326] dark:text-white">
+                          <h4 className="font-semibold text-[#212326] dark:text-white text-lg">
                             Overall Score
                           </h4>
                         </div>
-                        <span className="text-[#008060] dark:text-[#00a47c] bg-[#d1e8e0] dark:bg-[#004c3f]/20 px-2 py-1 rounded text-xs font-medium">
+                        <span className="text-[#008060] dark:text-[#00a47c] bg-[#d1e8e0]/60 dark:bg-[#004c3f]/30 px-3 py-1 rounded-lg text-xs font-medium shadow-sm">
                           Excellent
                         </span>
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-4">
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-[#6b7177] dark:text-gray-400">
+                          <span className="text-[#6b7177] dark:text-gray-400 font-medium">
                             UX Score
                           </span>
                           <div className="flex items-center">
-                            <div className="w-32 h-2 bg-[#dfe3e8] dark:bg-gray-700 rounded-full overflow-hidden mr-2">
-                              <div
-                                className="h-full bg-[#008060] dark:bg-[#00a47c] rounded-full"
-                                style={{ width: "90%" }}
-                              ></div>
+                            <div className="w-32 h-3 bg-[#dfe3e8]/60 dark:bg-gray-700/60 rounded-full overflow-hidden mr-3 shadow-inner">
+                              <motion.div
+                                className="h-full bg-gradient-to-r from-[#008060] to-[#00a47c] rounded-full"
+                                initial={{ width: 0 }}
+                                whileInView={{ width: "90%" }}
+                                viewport={{ once: true }}
+                                transition={{
+                                  delay: 0.4,
+                                  duration: 1,
+                                  ease: "easeOut",
+                                }}
+                              ></motion.div>
                             </div>
                             <span className="text-[#212326] dark:text-white font-medium">
                               9/10
@@ -607,15 +697,22 @@ export default function Home() {
                           </div>
                         </div>
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-[#6b7177] dark:text-gray-400">
+                          <span className="text-[#6b7177] dark:text-gray-400 font-medium">
                             Visual Design
                           </span>
                           <div className="flex items-center">
-                            <div className="w-32 h-2 bg-[#dfe3e8] dark:bg-gray-700 rounded-full overflow-hidden mr-2">
-                              <div
-                                className="h-full bg-[#008060] dark:bg-[#00a47c] rounded-full"
-                                style={{ width: "80%" }}
-                              ></div>
+                            <div className="w-32 h-3 bg-[#dfe3e8]/60 dark:bg-gray-700/60 rounded-full overflow-hidden mr-3 shadow-inner">
+                              <motion.div
+                                className="h-full bg-gradient-to-r from-[#008060] to-[#00a47c] rounded-full"
+                                initial={{ width: 0 }}
+                                whileInView={{ width: "80%" }}
+                                viewport={{ once: true }}
+                                transition={{
+                                  delay: 0.6,
+                                  duration: 1,
+                                  ease: "easeOut",
+                                }}
+                              ></motion.div>
                             </div>
                             <span className="text-[#212326] dark:text-white font-medium">
                               8/10
@@ -623,15 +720,22 @@ export default function Home() {
                           </div>
                         </div>
                         <div className="flex items-center justify-between text-sm">
-                          <span className="text-[#6b7177] dark:text-gray-400">
+                          <span className="text-[#6b7177] dark:text-gray-400 font-medium">
                             Conversion
                           </span>
                           <div className="flex items-center">
-                            <div className="w-32 h-2 bg-[#dfe3e8] dark:bg-gray-700 rounded-full overflow-hidden mr-2">
-                              <div
-                                className="h-full bg-[#008060] dark:bg-[#00a47c] rounded-full"
-                                style={{ width: "85%" }}
-                              ></div>
+                            <div className="w-32 h-3 bg-[#dfe3e8]/60 dark:bg-gray-700/60 rounded-full overflow-hidden mr-3 shadow-inner">
+                              <motion.div
+                                className="h-full bg-gradient-to-r from-[#008060] to-[#00a47c] rounded-full"
+                                initial={{ width: 0 }}
+                                whileInView={{ width: "85%" }}
+                                viewport={{ once: true }}
+                                transition={{
+                                  delay: 0.8,
+                                  duration: 1,
+                                  ease: "easeOut",
+                                }}
+                              ></motion.div>
                             </div>
                             <span className="text-[#212326] dark:text-white font-medium">
                               8.5/10
@@ -642,24 +746,24 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-[#212326] dark:text-white">
+                <h3 className="text-xl font-bold mb-4 text-[#212326] dark:text-white">
                   Comprehensive Report
                 </h3>
-                <p className="text-[#6b7177] dark:text-gray-400 mb-5">
+                <p className="text-[#6b7177] dark:text-gray-400 mb-6 leading-relaxed">
                   Get a detailed analysis report covering all aspects of your
                   store with clear, actionable recommendations.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="inline-block px-3 py-1 bg-[#d1e8e0] dark:bg-[#004c3f]/40 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-full">
+                  <span className="inline-block px-3.5 py-1.5 bg-[#d1e8e0]/60 dark:bg-[#004c3f]/30 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-lg shadow-sm">
                     UX Score
                   </span>
-                  <span className="inline-block px-3 py-1 bg-[#d1e8e0] dark:bg-[#004c3f]/40 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-full">
+                  <span className="inline-block px-3.5 py-1.5 bg-[#d1e8e0]/60 dark:bg-[#004c3f]/30 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-lg shadow-sm">
                     Conversion Analysis
                   </span>
-                  <span className="inline-block px-3 py-1 bg-[#d1e8e0] dark:bg-[#004c3f]/40 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-full">
+                  <span className="inline-block px-3.5 py-1.5 bg-[#d1e8e0]/60 dark:bg-[#004c3f]/30 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-lg shadow-sm">
                     Design Feedback
                   </span>
-                  <span className="inline-block px-3 py-1 bg-[#d1e8e0] dark:bg-[#004c3f]/40 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-full">
+                  <span className="inline-block px-3.5 py-1.5 bg-[#d1e8e0]/60 dark:bg-[#004c3f]/30 text-[#008060] dark:text-[#00a47c] text-xs font-medium rounded-lg shadow-sm">
                     Mobile Experience
                   </span>
                 </div>
@@ -667,7 +771,7 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <div className="mt-20 text-center">
+          <div className="mt-24 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -680,7 +784,7 @@ export default function Home() {
                     .querySelector("form")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="bg-[#008060] hover:bg-[#004c3f] text-white rounded-lg font-medium px-8 py-3 shadow-lg shadow-[#008060]/20 hover:shadow-[#008060]/30 transition-all duration-300"
+                className="bg-gradient-to-r from-[#008060] to-[#00a47c] hover:from-[#00a47c] hover:to-[#008060] text-white rounded-xl font-medium px-8 py-4 shadow-xl shadow-[#008060]/20 hover:shadow-[#008060]/30 transform hover:-translate-y-1 transition-all duration-300"
               >
                 Try Mystery Shopper Now
               </Button>
@@ -751,7 +855,7 @@ export default function Home() {
                   >
                     <path
                       fillRule="evenodd"
-                      d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                      d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.353.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
                       clipRule="evenodd"
                     />
                   </svg>

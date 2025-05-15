@@ -104,6 +104,22 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #dfe3e8;
   --sidebar-ring: #008060;
+
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
 }
 
 .dark {
@@ -289,19 +305,21 @@
 
 /* Multi-color gradient text */
 .gradient-multi-text {
-  background: linear-gradient(90deg, #008060 0%, #5c6ac4 50%, #47c1bf 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#008060] via-[#5c6ac4] to-[#47c1bf];
+  background-size: 200% 200%;
+  animation: gradient 8s ease infinite;
 }
 
-.dark .gradient-multi-text {
-  background: linear-gradient(90deg, #00a47c 0%, #6e79d6 50%, #2ed0cd 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Enhanced navbar styles */
@@ -321,94 +339,68 @@
 
 /* Animated background */
 .animated-bg {
-  background: linear-gradient(
-    -45deg,
-    #ffffff,
-    var(--shopify-light-green),
-    var(--accent-teal-light),
-    var(--accent-purple-light)
-  );
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
+  position: relative;
 }
 
-.dark .animated-bg {
-  background: linear-gradient(
-    -45deg,
-    #1a1a1a,
-    var(--shopify-dark-green),
-    var(--accent-teal-light),
-    var(--accent-purple-light)
-  );
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.animated-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='rgba(92, 106, 196, 0.05)'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: 0;
 }
 
 /* Colorful cards */
 .card-gradient-1 {
   background: linear-gradient(
     135deg,
-    #ffffff 0%,
-    var(--shopify-light-green) 100%
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(246, 246, 247, 0.9) 100%
   );
-  border: 1px solid rgba(0, 128, 96, 0.1);
 }
 
 .dark .card-gradient-1 {
   background: linear-gradient(
     135deg,
-    #212326 0%,
-    var(--shopify-dark-green) 100%
+    rgba(26, 26, 26, 0.9) 0%,
+    rgba(33, 35, 38, 0.9) 100%
   );
-  border: 1px solid rgba(0, 164, 124, 0.2);
 }
 
 .card-gradient-2 {
   background: linear-gradient(
     135deg,
-    #ffffff 0%,
-    var(--accent-purple-light) 100%
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(246, 246, 247, 0.9) 100%
   );
-  border: 1px solid rgba(92, 106, 196, 0.1);
 }
 
 .dark .card-gradient-2 {
   background: linear-gradient(
     135deg,
-    #212326 0%,
-    var(--accent-purple-light) 100%
+    rgba(26, 26, 26, 0.9) 0%,
+    rgba(33, 35, 38, 0.9) 100%
   );
-  border: 1px solid rgba(110, 121, 214, 0.2);
 }
 
 .card-gradient-3 {
   background: linear-gradient(
     135deg,
-    #ffffff 0%,
-    var(--accent-teal-light) 100%
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(246, 246, 247, 0.9) 100%
   );
-  border: 1px solid rgba(71, 193, 191, 0.1);
 }
 
 .dark .card-gradient-3 {
   background: linear-gradient(
     135deg,
-    #212326 0%,
-    var(--accent-teal-light) 100%
+    rgba(26, 26, 26, 0.9) 0%,
+    rgba(33, 35, 38, 0.9) 100%
   );
-  border: 1px solid rgba(46, 208, 205, 0.2);
 }
 
 /* Decorative elements */
@@ -476,15 +468,15 @@
 
 /* Colorful shadows */
 .shadow-green {
-  box-shadow: 0 4px 14px 0 rgba(0, 128, 96, 0.2);
+  box-shadow: 0 10px 40px -10px rgba(0, 128, 96, 0.3);
 }
 
 .shadow-purple {
-  box-shadow: 0 4px 14px 0 rgba(92, 106, 196, 0.2);
+  box-shadow: 0 10px 40px -10px rgba(92, 106, 196, 0.3);
 }
 
 .shadow-teal {
-  box-shadow: 0 4px 14px 0 rgba(71, 193, 191, 0.2);
+  box-shadow: 0 10px 40px -10px rgba(71, 193, 191, 0.3);
 }
 
 .shadow-multi {
@@ -505,4 +497,39 @@
     -8px -8px 16px rgba(50, 50, 50, 0.1);
   background: linear-gradient(145deg, #1a1a1a, #212326);
   border: 1px solid rgba(50, 50, 50, 0.5);
+}
+
+/* Background patterns and gradients */
+.bg-grid-pattern {
+  background-image: linear-gradient(
+      to right,
+      rgba(200, 200, 200, 0.1) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(200, 200, 200, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-gradient-pattern {
+  background-image: radial-gradient(
+      circle at 10% 20%,
+      rgba(0, 128, 96, 0.05) 0%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 80% 60%,
+      rgba(92, 106, 196, 0.05) 0%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgba(71, 193, 191, 0.05) 0%,
+      transparent 20%
+    );
+}
+
+@media (prefers-color-scheme: dark) {
+  .animated-bg::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='10' cy='10' r='1' fill='rgba(110, 121, 214, 0.05)'/%3E%3C/svg%3E");
+  }
 }

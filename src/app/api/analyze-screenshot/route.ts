@@ -18,7 +18,7 @@ interface GeminiAnnotation {
 
 export async function POST(req: Request) {
   try {
-    const { imageBase64 } = await req.json();
+    const { imageBase64, width, height } = await req.json();
 
     if (!imageBase64) {
       return NextResponse.json(
@@ -27,7 +27,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // Remove the "data:image/png;base64," prefix if present
+    // Determine image dimensions from client-provided data or use defaults
+    const imageDimensions = {
+      width: width || 1200,
+      height: height || 900,
+    };
+
+    console.log(
+      `Using image dimensions: ${imageDimensions.width}x${imageDimensions.height}`
+    );
+
+    // Remove the "data:image/png;base64," prefix if present for Gemini API
     const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
 
     // Call Gemini API with the image
@@ -38,7 +48,9 @@ export async function POST(req: Request) {
           role: "user",
           parts: [
             {
-              text: `Analyze this website screenshot and identify 3-5 UX/UI issues. 
+              text: `Analyze this website screenshot and identify 3-5 UX/UI issues.
+The image dimensions are ${imageDimensions.width}x${imageDimensions.height} pixels. 
+
 For each issue:
 1. Describe the issue briefly (max 10 words)
 2. Classify as "error" (serious problem), "warning" (moderate issue), or "suggestion" (improvement)
@@ -95,8 +107,12 @@ Focus on these common UI/UX issues:
           type: ["error", "warning", "suggestion"].includes(anno.type as string)
             ? anno.type
             : "suggestion",
-          x: Math.round((anno.position?.x || 0.5) * 800) || 400, // Assuming 800px width
-          y: Math.round((anno.position?.y || 0.5) * 600) || 300, // Assuming 600px height
+          x:
+            Math.round((anno.position?.x || 0.5) * imageDimensions.width) ||
+            Math.round(imageDimensions.width / 2),
+          y:
+            Math.round((anno.position?.y || 0.5) * imageDimensions.height) ||
+            Math.round(imageDimensions.height / 2),
         })
       );
 

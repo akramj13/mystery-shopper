@@ -21,6 +21,7 @@
     "motion": "^12.11.3",
     "next": "15.3.2",
     "pixi.js": "^8.9.2",
+    "playwright": "^1.52.0",
     "puppeteer": "^24.8.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
