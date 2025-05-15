@@ -255,7 +255,7 @@ export default function AnnotatePage() {
                 type="text"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                placeholder="Enter website URL (e.g., example.com)"
+                placeholder="Enter website URL (e.g. mystore.com)"
                 className="w-full pl-10 pr-4 py-3 border border-[#dfe3e8] dark:border-gray-700 rounded-lg focus:ring-[#008060] focus:border-[#008060] bg-white dark:bg-[#212326] text-[#212326] dark:text-white transition-all duration-200"
               />
             </div>

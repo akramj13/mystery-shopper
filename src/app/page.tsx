@@ -21,19 +21,28 @@ export default function Home() {
     setError(null);
 
     try {
+      // Add https if not present
+      let targetUrl = url;
+      if (
+        !targetUrl.startsWith("http://") &&
+        !targetUrl.startsWith("https://")
+      ) {
+        targetUrl = `https://${targetUrl}`;
+      }
+
       const response = await fetch("/api/critique", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ url: targetUrl }),
       });
 
       if (response.ok) {
         const data: AnalysisResult = await response.json();
 
         // Save the analysis result and URL to localStorage
-        localStorage.setItem("analyzedUrl", url);
+        localStorage.setItem("analyzedUrl", targetUrl);
         localStorage.setItem("analysisResult", JSON.stringify(data));
 
         router.push("/result");
@@ -151,8 +160,8 @@ export default function Home() {
             >
               <div className="flex flex-col md:flex-row gap-3 relative">
                 <input
-                  type="url"
-                  placeholder="Enter your Shopify store URL"
+                  type="text"
+                  placeholder="Enter your store URL (e.g. mystore.com)"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   className="flex-grow rounded-lg border border-[#dfe3e8] dark:border-gray-700 bg-white dark:bg-[#1a1a1a] px-4 py-4 text-base focus:outline-none focus:ring-2 focus:ring-[#5c6ac4] dark:focus:ring-[#6e79d6] shadow-lg neumorphic"
