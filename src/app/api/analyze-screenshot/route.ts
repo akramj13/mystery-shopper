@@ -6,6 +6,16 @@ const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY as string,
 });
 
+// Define interface for Gemini API response annotations
+interface GeminiAnnotation {
+  text?: string;
+  type?: string;
+  position?: {
+    x?: number;
+    y?: number;
+  };
+}
+
 export async function POST(req: Request) {
   try {
     const { imageBase64 } = await req.json();
@@ -66,7 +76,7 @@ Focus on these common UI/UX issues:
     });
 
     // Get response text
-    let responseText = response.text || "No response from Gemini.";
+    const responseText = response.text || "No response from Gemini.";
 
     // Parse the JSON response
     try {
@@ -79,14 +89,14 @@ Focus on these common UI/UX issues:
 
       // Validate and transform the annotations
       const transformedAnnotations = annotations.map(
-        (anno: any, index: number) => ({
+        (anno: GeminiAnnotation, index: number) => ({
           id: `ai-anno-${Date.now()}-${index}`,
           text: anno.text || "UI/UX issue detected",
-          type: ["error", "warning", "suggestion"].includes(anno.type)
+          type: ["error", "warning", "suggestion"].includes(anno.type as string)
             ? anno.type
             : "suggestion",
-          x: Math.round(anno.position?.x * 800) || 400, // Assuming 800px width
-          y: Math.round(anno.position?.y * 600) || 300, // Assuming 600px height
+          x: Math.round((anno.position?.x || 0.5) * 800) || 400, // Assuming 800px width
+          y: Math.round((anno.position?.y || 0.5) * 600) || 300, // Assuming 600px height
         })
       );
 

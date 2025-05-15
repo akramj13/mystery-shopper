@@ -526,8 +526,8 @@ export default function AnnotatePage() {
                     No annotations yet
                   </p>
                   <p className="text-sm text-[#6b7177] dark:text-gray-400">
-                    Click on the image to add one or use the "AI Analyze" button
-                    for automatic suggestions.
+                    Click on the image to add one or use the &quot;AI
+                    Analyze&quot; button for automatic suggestions.
                   </p>
                 </div>
               ) : (
@@ -631,8 +631,8 @@ export default function AnnotatePage() {
               Ready to Capture
             </h2>
             <p className="text-[#6b7177] dark:text-gray-400 max-w-lg mx-auto">
-              Enter a website URL above and click "Take Screenshot" to begin
-              annotating and analyzing the page.
+              Enter a website URL above and click &quot;Take Screenshot&quot; to
+              begin annotating and analyzing the page.
             </p>
           </motion.div>
         )}
