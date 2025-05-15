@@ -230,12 +230,25 @@ export default function AnnotatePage() {
         `Analyzing screenshot with dimensions: ${imageWidth}x${imageHeight}`
       );
 
+      // Compress the image before sending it to the API
+      const compressedImageBase64 = await compressImage(
+        screenshotUrl,
+        0.7,
+        1000
+      );
+      console.log(
+        `Original image size: ${Math.round(screenshotUrl.length / 1024)}KB, ` +
+          `Compressed image size: ${Math.round(
+            compressedImageBase64.length / 1024
+          )}KB`
+      );
+
       console.log("Sending request to analyze-screenshot API");
       const response = await fetch("/api/analyze-screenshot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          imageBase64: screenshotUrl,
+          imageBase64: compressedImageBase64,
           width: imageWidth,
           height: imageHeight,
         }),
@@ -276,6 +289,52 @@ export default function AnnotatePage() {
     } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  // Function to compress an image
+  const compressImage = (
+    dataURL: string,
+    quality = 0.7,
+    maxWidth = 1000
+  ): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        // Create a canvas element
+        const canvas = document.createElement("canvas");
+
+        // Calculate new dimensions while maintaining aspect ratio
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // Draw image on canvas
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Could not get canvas context"));
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Get compressed data URL
+        const compressedDataURL = canvas.toDataURL("image/jpeg", quality);
+        resolve(compressedDataURL);
+      };
+
+      img.onerror = () => {
+        reject(new Error("Failed to load image for compression"));
+      };
+
+      img.src = dataURL;
+    });
   };
 
   const handleAddAnnotation = useCallback((annotation: Annotation) => {

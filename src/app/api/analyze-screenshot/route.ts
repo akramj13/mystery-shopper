@@ -66,6 +66,21 @@ export async function POST(req: Request) {
     // Remove the "data:image/png;base64," prefix if present for Gemini API
     const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
 
+    // Check the size of the base64 data
+    const dataSizeKB = Math.round((base64Data.length * 3) / 4 / 1024);
+    console.log(`Base64 data size: ~${dataSizeKB}KB`);
+
+    // Check if data is too large for Vercel serverless function (4MB limit)
+    if (dataSizeKB > 3500) {
+      return NextResponse.json(
+        {
+          error: "Image too large",
+          details: `Image size (${dataSizeKB}KB) exceeds maximum allowed size. Please use a smaller image or reduce quality.`,
+        },
+        { status: 413 }
+      );
+    }
+
     // Call Gemini API with the image
     const response = await genAI.models.generateContent({
       model: "gemini-2.0-flash",
