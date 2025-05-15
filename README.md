@@ -2,8 +2,6 @@
 
 A powerful web application that allows users to capture, annotate, and analyze screenshots of websites. Perfect for UI/UX designers, quality assurance teams, and developers to identify and communicate visual issues.
 
-![Mystery Shopper Screenshot](https://github.com/akramj13/mystery-shopper/assets/preview.png)
-
 ## 🌟 Features
 
 - **Screenshot Upload**: Easily upload screenshots through drag-and-drop or file selection
