@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { AnalysisResult } from "@/types/critique";
+import Link from "next/link";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -143,7 +144,7 @@ export default function Home() {
 
             <motion.form
               onSubmit={handleSubmit}
-              className="max-w-2xl mx-auto mb-16"
+              className="max-w-2xl mx-auto mb-8"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
@@ -208,6 +209,48 @@ export default function Home() {
               </div>
               {error && <p className="text-[#d82c0d] mt-2 text-sm">{error}</p>}
             </motion.form>
+
+            <motion.div
+              className="flex flex-col items-center justify-center gap-4 mb-16"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+            >
+              <div className="h-px w-24 bg-gray-200 dark:bg-gray-700"></div>
+              <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+                or try our visual feedback tool
+              </p>
+              <Link href="/annotate">
+                <motion.button
+                  className="group flex items-center gap-2 px-6 py-3 bg-white dark:bg-[#1a1a1a] border border-[#dfe3e8] dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <svg
+                    className="w-5 h-5 text-[#5c6ac4] group-hover:scale-110 transition-transform duration-300"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  <span className="font-medium text-[#212326] dark:text-white">
+                    Capture & Annotate Screenshots
+                  </span>
+                </motion.button>
+              </Link>
+            </motion.div>
           </div>
 
           <motion.div

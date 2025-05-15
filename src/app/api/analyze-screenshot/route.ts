@@ -1,0 +1,111 @@
+import { NextResponse } from "next/server";
+import { GoogleGenAI } from "@google/genai";
+
+// Initialize the Google Generative AI with your API key
+const genAI = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY as string,
+});
+
+export async function POST(req: Request) {
+  try {
+    const { imageBase64 } = await req.json();
+
+    if (!imageBase64) {
+      return NextResponse.json(
+        { error: "No image data provided" },
+        { status: 400 }
+      );
+    }
+
+    // Remove the "data:image/png;base64," prefix if present
+    const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+
+    // Call Gemini API with the image
+    const response = await genAI.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `Analyze this website screenshot and identify 3-5 UX/UI issues. 
+For each issue:
+1. Describe the issue briefly (max 10 words)
+2. Classify as "error" (serious problem), "warning" (moderate issue), or "suggestion" (improvement)
+3. Provide approximate x,y coordinates (as percentage of image width/height) where the issue is located
+
+Respond in this JSON format only:
+[
+  {
+    "text": "Issue description",
+    "type": "error|warning|suggestion",
+    "position": { "x": 0.5, "y": 0.3 }
+  }
+]
+
+Focus on these common UI/UX issues:
+- Unclear call-to-action buttons
+- Low contrast text
+- Overwhelming amount of text
+- Poor visual hierarchy
+- Confusing navigation
+- Mobile responsiveness issues
+- Accessibility concerns
+- Slow-loading elements
+- Inconsistent design`,
+            },
+            {
+              inlineData: {
+                mimeType: "image/png",
+                data: base64Data,
+              },
+            },
+          ],
+        },
+      ],
+    });
+
+    // Get response text
+    let responseText = response.text || "No response from Gemini.";
+
+    // Parse the JSON response
+    try {
+      // Extract JSON from the response if surrounded by markdown code blocks
+      const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/) ||
+        responseText.match(/```\s*([\s\S]*?)\s*```/) || [null, responseText];
+
+      const jsonText = jsonMatch[1] || responseText;
+      const annotations = JSON.parse(jsonText);
+
+      // Validate and transform the annotations
+      const transformedAnnotations = annotations.map(
+        (anno: any, index: number) => ({
+          id: `ai-anno-${Date.now()}-${index}`,
+          text: anno.text || "UI/UX issue detected",
+          type: ["error", "warning", "suggestion"].includes(anno.type)
+            ? anno.type
+            : "suggestion",
+          x: Math.round(anno.position?.x * 800) || 400, // Assuming 800px width
+          y: Math.round(anno.position?.y * 600) || 300, // Assuming 600px height
+        })
+      );
+
+      return NextResponse.json({ annotations: transformedAnnotations });
+    } catch (parseError) {
+      console.error("Failed to parse Gemini response:", parseError);
+      return NextResponse.json(
+        {
+          error: "Failed to parse AI response",
+          rawResponse: responseText,
+        },
+        { status: 500 }
+      );
+    }
+  } catch (err) {
+    console.error("Screenshot analysis error:", err);
+    return NextResponse.json(
+      { error: "Failed to analyze screenshot" },
+      { status: 500 }
+    );
+  }
+}
