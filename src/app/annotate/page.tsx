@@ -230,6 +230,7 @@ export default function AnnotatePage() {
         `Analyzing screenshot with dimensions: ${imageWidth}x${imageHeight}`
       );
 
+      console.log("Sending request to analyze-screenshot API");
       const response = await fetch("/api/analyze-screenshot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -240,26 +241,37 @@ export default function AnnotatePage() {
         }),
       });
 
+      console.log("Response status:", response.status);
+
       if (!response.ok) {
-        throw new Error("Failed to analyze screenshot");
+        const errorData = await response.json().catch(() => ({}));
+        console.error("API error details:", errorData);
+        throw new Error(
+          `Failed to analyze screenshot: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
+      console.log("Response data keys:", Object.keys(data));
 
       if (data.error) {
+        console.error("API returned error:", data.error, data.details || "");
         throw new Error(data.error);
       }
 
       if (data.annotations && Array.isArray(data.annotations)) {
+        console.log(`Received ${data.annotations.length} annotations from API`);
         // Add new AI annotations to existing annotations
         setAnnotations((prevAnnotations) => [
           ...prevAnnotations,
           ...data.annotations,
         ]);
       } else {
+        console.error("Invalid response format:", data);
         throw new Error("Invalid response format from analysis");
       }
     } catch (err) {
+      console.error("Screenshot analysis error:", err);
       setError((err as Error).message || "Failed to analyze screenshot");
     } finally {
       setIsAnalyzing(false);

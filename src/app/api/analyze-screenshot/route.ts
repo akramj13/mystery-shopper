@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
+// Check if the API key is available
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  console.error("GEMINI_API_KEY is not defined in environment variables");
+}
+
 // Initialize the Google Generative AI with your API key
 const genAI = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY as string,
+  apiKey: apiKey as string,
 });
 
 // Define interface for Gemini API response annotations
@@ -18,11 +24,31 @@ interface GeminiAnnotation {
 
 export async function POST(req: Request) {
   try {
+    // Check if API key is available
+    if (!apiKey) {
+      console.error("Cannot process request: GEMINI_API_KEY is not defined");
+      return NextResponse.json(
+        {
+          error: "API configuration error",
+          details: "API key is not configured",
+        },
+        { status: 500 }
+      );
+    }
+
     const { imageBase64, width, height } = await req.json();
 
     if (!imageBase64) {
       return NextResponse.json(
         { error: "No image data provided" },
+        { status: 400 }
+      );
+    }
+
+    // Validate image format
+    if (!imageBase64.startsWith("data:image/")) {
+      return NextResponse.json(
+        { error: "Invalid image format. Must be base64 data URL" },
         { status: 400 }
       );
     }
@@ -129,8 +155,15 @@ Focus on these common UI/UX issues:
     }
   } catch (err) {
     console.error("Screenshot analysis error:", err);
+    // Add more detailed error information
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    const errorStack = err instanceof Error ? err.stack : undefined;
     return NextResponse.json(
-      { error: "Failed to analyze screenshot" },
+      {
+        error: "Failed to analyze screenshot",
+        details: errorMessage,
+        stack: errorStack,
+      },
       { status: 500 }
     );
   }
